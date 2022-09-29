@@ -30,7 +30,7 @@ df = pd.read_csv("https://github.com/pandas-dev/pandas/raw/main/doc/data/air_qua
 - df.d_natort_columns 
 - df.d_natsort_df_by_column 
 
-**All methods added to pandas have on of this prefixes:**
+**All methods added to pandas have one of this prefixes:**
 
 - **ds_** (for DataFrames and Series)
 
