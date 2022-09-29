@@ -11,7 +11,7 @@ import pandas as pd
 df = pd.read_csv("https://github.com/pandas-dev/pandas/raw/main/doc/data/air_quality_long.csv")
 ```
 
-**The code above will add some new methods to you df**
+**The code above will add some new methods to your df**
 
 - df.d_swap_2_columns 
 - df.ds_sort_by_str_length 
