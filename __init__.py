@@ -3,8 +3,7 @@ import regex
 from natsort import ns, index_natsorted, natsorted
 import pandas as pd
 from typing import Union
-from pandas.core.base import PandasObject
-
+from pandas.core.frame import DataFrame, Series
 
 def change_places_2_columns(
     df: pd.DataFrame, column1: Union[str, float, int], column2: Union[str, float, int]
@@ -423,21 +422,25 @@ def sort_whole_df_with_natsort(
 
 
 def pd_add_index_and_columns():
-    PandasObject.d_swap_2_columns = change_places_2_columns
-    PandasObject.ds_sort_by_str_length = qq_ds_sort_len
-    PandasObject.d_insert_column_before_another = qq_d_insert_column_before_column
-    PandasObject.ds_reverse = reverse_dataframe
-    PandasObject.d_add_prefix_to_column_when_regex_match = (
+    DataFrame.d_swap_2_columns = change_places_2_columns
+    DataFrame.ds_sort_by_str_length = qq_ds_sort_len
+    Series.ds_sort_by_str_length = qq_ds_sort_len
+
+    DataFrame.d_insert_column_before_another = qq_d_insert_column_before_column
+    DataFrame.ds_reverse = reverse_dataframe
+    Series.ds_reverse = reverse_dataframe
+
+    DataFrame.d_add_prefix_to_column_when_regex_match = (
         add_prefix_to_column_when_regex
     )
-    PandasObject.d_add_prefix_to_index_when_regex_match = add_prefix_to_index_when_regex
-    PandasObject.d_filter_df_by_regex_in_index = regex_filter_index
-    PandasObject.d_filter_df_by_regex_in_columns = regex_filter_columns
-    PandasObject.d_columns_upper = columns_upper
-    PandasObject.d_index_upper = index_upper
-    PandasObject.d_index_lower = index_lower
-    PandasObject.d_columns_lower = columns_lower
-    PandasObject.d_make_columns_dot_compatible = make_columns_dot_compatible
-    PandasObject.d_natsort_index = qq_d_sort_index
-    PandasObject.d_natort_columns = qq_d_sort_columns
-    PandasObject.d_natsort_df_by_column = sort_whole_df_with_natsort
+    DataFrame.d_add_prefix_to_index_when_regex_match = add_prefix_to_index_when_regex
+    DataFrame.d_filter_df_by_regex_in_index = regex_filter_index
+    DataFrame.d_filter_df_by_regex_in_columns = regex_filter_columns
+    DataFrame.d_columns_upper = columns_upper
+    DataFrame.d_index_upper = index_upper
+    DataFrame.d_index_lower = index_lower
+    DataFrame.d_columns_lower = columns_lower
+    DataFrame.d_make_columns_dot_compatible = make_columns_dot_compatible
+    DataFrame.d_natsort_index = qq_d_sort_index
+    DataFrame.d_natort_columns = qq_d_sort_columns
+    DataFrame.d_natsort_df_by_column = sort_whole_df_with_natsort
