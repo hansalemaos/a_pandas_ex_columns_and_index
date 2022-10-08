@@ -1,5 +1,6 @@
 import numpy as np
 import regex
+from flatten_any_dict_iterable_or_whatsoever import fla_tu
 from natsort import ns, index_natsorted, natsorted
 import pandas as pd
 from typing import Union
@@ -420,6 +421,47 @@ def sort_whole_df_with_natsort(
         )
         return df2.copy()
 
+def check_if_equal(vara, varb):
+    if str(type(vara)) == str(type(varb)):
+        if str(vara) == str(varb):
+            if len(set(dir(vara)) ^ set(dir(varb))) == 0:
+                return True
+    return False
+
+def fladicol(*args, **kwargs):
+    return {x[1][-1]:x[0] for x in (fla_tu([args, kwargs]))}
+
+def rename_columns(*args, **kwargs):
+    kwargs['______col____or____index'] = 'columns'
+    kwargs['______df___']  = args[0]
+    return rename_columnsindex(*args, **kwargs)
+
+def rename_index(*args, **kwargs):
+    kwargs['______col____or____index'] = 'index'
+    kwargs['______df___']  = args[0]
+    return rename_columnsindex(*args, **kwargs)
+
+def rename_columnsindex(*args, **kwargs):
+    df2 = kwargs['______df___']
+    iscols  = kwargs['______col____or____index'] == 'columns'
+    if iscols:
+        startcols = [x for x in df2.columns.to_list()]
+    else:
+        startcols = [x for x in df2.index.to_list()]
+    kwargs = {x[0]:x[1] for x in kwargs.items() if x[0] not in ['______col____or____index','______df___']}
+    renamedict = fladicol(*args[1:],**kwargs)
+    newdict= {}
+    for ini,col in enumerate(startcols):
+        if col not in renamedict:
+            newdict[ini] = col
+        else:
+            newdict[ini] = renamedict[col]
+    finallist = [x[1] for x in sorted(newdict.items())]
+    if iscols:
+        df2.columns = finallist
+    else:
+        df2.index = finallist
+    return df2
 
 def pd_add_index_and_columns():
     DataFrame.d_swap_2_columns = change_places_2_columns
@@ -444,3 +486,5 @@ def pd_add_index_and_columns():
     DataFrame.d_natsort_index = qq_d_sort_index
     DataFrame.d_natort_columns = qq_d_sort_columns
     DataFrame.d_natsort_df_by_column = sort_whole_df_with_natsort
+    DataFrame.d_rename_columns = rename_columns
+    DataFrame.d_rename_index = rename_index

@@ -29,6 +29,8 @@ df = pd.read_csv("https://github.com/pandas-dev/pandas/raw/main/doc/data/air_qua
 - df.d_natsort_index 
 - df.d_natort_columns 
 - df.d_natsort_df_by_column 
+- d_rename_index
+- d_rename_columns
 
 **All methods added to pandas have one of this prefixes:**
 
@@ -79,7 +81,6 @@ Index(['country', 'city', 'date.utc', 'location', 'parameter', 'value',
 5270      GB     London  2019-04-09 03:00:00+00:00  ...       no2  67.0  µg/m³
 5271      GB     London  2019-04-09 02:00:00+00:00  ...       no2  67.0  µg/m³
 [5272 rows x 7 columns]
-
 ```
 
 ### df.ds_sort_by_str_length
@@ -115,7 +116,6 @@ print(df2)
 3548  Antwerpen      BE  2019-05-19 21:00:00+00:00  ...       no2  12.5  µg/m³
 0     Antwerpen      BE  2019-06-18 06:00:00+00:00  ...      pm25  18.0  µg/m³
 [5272 rows x 7 columns]
-
 ```
 
 ### d_insert_column_before_another
@@ -151,7 +151,6 @@ Out[7]:
 5270     London      GB  2019-04-09 03:00:00+00:00  ...     LondonGB  67.0  µg/m³
 5271     London      GB  2019-04-09 02:00:00+00:00  ...     LondonGB  67.0  µg/m³
 [5272 rows x 8 columns]
-
 ```
 
 ### df.ds_reverse
@@ -384,7 +383,6 @@ Index(['pm25', 'pm25', 'pm25', 'pm25', 'pm25', 'pm25', 'pm25', 'pm25', 'pm25',
        ...
        'no2', 'no2', 'no2', 'no2', 'no2', 'no2', 'no2', 'no2', 'no2', 'no2'],
       dtype='object', length=5272)
-
 ```
 
 ### df.d_natsort_index
@@ -485,4 +483,62 @@ Out[4]:
 177      London      GB  2019-06-21 00:00:00+00:00  ...      pm25   7.0  µg/m³
 1825      Paris      FR  2019-06-21 00:00:00+00:00  ...       no2  20.0  µg/m³
 [5272 rows x 7 columns]
+```
+
+### df.d_rename_columns / df.d_rename_index
+
+```python
+df = pd.read_csv(    "https://github.com/pandas-dev/pandas/raw/main/doc/data/titanic.csv")
+
+print(df)
+     PassengerId  Survived  Pclass  ...     Fare Cabin  Embarked
+0              1         0       3  ...   7.2500   NaN         S
+1              2         1       1  ...  71.2833   C85         C
+2              3         1       3  ...   7.9250   NaN         S
+3              4         1       1  ...  53.1000  C123         S
+4              5         0       3  ...   8.0500   NaN         S
+..           ...       ...     ...  ...      ...   ...       ...
+886          887         0       2  ...  13.0000   NaN         S
+887          888         1       1  ...  30.0000   B42         S
+888          889         0       3  ...  23.4500   NaN         S
+889          890         1       1  ...  30.0000  C148         C
+890          891         0       3  ...   7.7500   NaN         Q
+
+
+df.d_rename_columns(Fare='Embarked',Embarked='Fare',Cabin='cabin2')
+df.d_rename_index({1: 1000000,2:50022})
+print(df)
+
+         PassengerId  Survived  Pclass  ... Embarked cabin2  Fare
+0                  1         0       3  ...   7.2500    NaN     S
+1000000            2         1       1  ...  71.2833    C85     C
+50022              3         1       3  ...   7.9250    NaN     S
+3                  4         1       1  ...  53.1000   C123     S
+4                  5         0       3  ...   8.0500    NaN     S
+              ...       ...     ...  ...      ...    ...   ...
+886              887         0       2  ...  13.0000    NaN     S
+887              888         1       1  ...  30.0000    B42     S
+888              889         0       3  ...  23.4500    NaN     S
+889              890         1       1  ...  30.0000   C148     C
+890              891         0       3  ...   7.7500    NaN     Q
+[891 rows x 12 columns]
+
+df.d_rename_columns({'Embarked': 'Fare', 'Fare' : 'Embarked', 'cabin2' : 'Cabin'})
+df.index = df.index.astype('string')
+df.index = 'a' + df.index
+df.d_rename_index(a1000000= 1,a50022=2)
+print(df)
+
+      PassengerId  Survived  Pclass  ...     Fare Cabin  Embarked
+a0              1         0       3  ...   7.2500   NaN         S
+1               2         1       1  ...  71.2833   C85         C
+2               3         1       3  ...   7.9250   NaN         S
+a3              4         1       1  ...  53.1000  C123         S
+a4              5         0       3  ...   8.0500   NaN         S
+           ...       ...     ...  ...      ...   ...       ...
+a886          887         0       2  ...  13.0000   NaN         S
+a887          888         1       1  ...  30.0000   B42         S
+a888          889         0       3  ...  23.4500   NaN         S
+a889          890         1       1  ...  30.0000  C148         C
+a890          891         0       3  ...   7.7500   NaN         Q
 ```
